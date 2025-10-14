@@ -162,33 +162,6 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 5),
-
-                            // 🟡 Bouton blanc sous l’avatar
-                            // ElevatedButton(
-                            //   onPressed: () {
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //       const SnackBar(
-                            //         content: Text(
-                            //           'Bouton de modification de l’avatar cliqué.',
-                            //           style: TextStyle(color: Colors.white),
-                            //         ),
-                            //         backgroundColor: Colors.black87,
-                            //         duration: Duration(seconds: 2),
-                            //       ),
-                            //     );
-                            //   },
-                            //   style: ElevatedButton.styleFrom(
-                            //     backgroundColor: Colors.white,
-                            //     foregroundColor: Colors.black,
-                            //     shadowColor: Colors.grey,
-                            //     elevation: 2,
-                            //     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                            //     shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(8),
-                            //     ),
-                            //   ),
-                            //   child: const Text('Modifier'),
-                            // ),
                           ],
                         ),
                       ),
