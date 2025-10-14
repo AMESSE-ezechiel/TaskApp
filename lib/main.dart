@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:trasker/screens/profile_screen.dart';
-import 'screens/profile_screen.dart';
+import 'screens/page_profile.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.indigo,
         scaffoldBackgroundColor: const Color(0xFFD9D9D9),
-        fontFamily: 'Poppins', // si tu veux une typographie plus moderne
+        fontFamily: 'Poppins', 
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.white,
@@ -26,7 +25,7 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const ProfileScreen(),
+      home: const PageProfile(),
     );
   }
 }
