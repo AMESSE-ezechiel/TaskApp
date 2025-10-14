@@ -59,12 +59,15 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                width: MediaQuery.of(context).size.width * 0.85,
+                width: 320,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Logo
-                    Image.asset('assets/logo.png', height: 90),
+                    Image.asset(
+                      'assets/groupe1.png',
+                      height: 90,
+                    ),
                     const SizedBox(height: 20),
 
                     // Titre
@@ -73,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF4B2FBF),
+                        color: Color(0xFF3B5998),
                       ),
                     ),
                     const SizedBox(height: 25),
@@ -109,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4B2FBF),
+                          backgroundColor: const Color(0xFF3B5998),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
@@ -155,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: const Text(
                             "Inscrivez-vous",
                             style: TextStyle(
-                              color: Color(0xFF4B2FBF),
+                              color: Color(0xFF3B5998),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -194,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
       obscureText: obscureText,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: Colors.deepPurple),
+        prefixIcon: Icon(icon, color: const Color(0xFF3B5998)),
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: Colors.white,
@@ -206,13 +209,16 @@ class _LoginPageState extends State<LoginPage> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
-            color: Colors.deepPurple.withOpacity(0.3),
+            color: const Color(0xFF3B5998).withOpacity(0.3),
             width: 2,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
-          borderSide: const BorderSide(color: Color(0xFF4B2FBF), width: 2),
+          borderSide: const BorderSide(
+            color: Color(0xFF3B5998),
+            width: 2,
+          ),
         ),
       ),
     );
