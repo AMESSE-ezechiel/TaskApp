@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_app/Models/users.dart';
+import 'package:task_app/Providers/auth.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -18,6 +21,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FF),
       body: Stack(
@@ -43,7 +47,10 @@ class _RegisterPageState extends State<RegisterPage> {
           Center(
             child: SingleChildScrollView(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 40,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
@@ -60,10 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Logo
-                    Image.asset(
-                      'assets/logo.png',
-                      height: 90,
-                    ),
+                    Image.asset('assets/logo.png', height: 90),
                     const SizedBox(height: 20),
 
                     // Titre
@@ -101,9 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: !_isVisible,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          _isVisible ? Icons.visibility : Icons.visibility_off,
                           color: Colors.grey,
                         ),
                         onPressed: () {
@@ -121,9 +123,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       obscureText: !_isVisible,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          _isVisible ? Icons.visibility : Icons.visibility_off,
                           color: Colors.grey,
                         ),
                         onPressed: () {
@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF4B2FBF),
+                          backgroundColor: Color(0xFF4B2FBF),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30),
@@ -146,11 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           elevation: 5,
                         ),
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Inscription en cours..."),
-                            ),
-                          );
+                          _validation();
                         },
                         child: const Text(
                           "S'inscrire",
@@ -176,7 +172,9 @@ class _RegisterPageState extends State<RegisterPage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (_) => const LoginPage()),
+                              MaterialPageRoute(
+                                builder: (_) => const LoginPage(),
+                              ),
                             );
                           },
                           child: const Text(
@@ -197,6 +195,8 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
     );
+
+
   }
 
   // 🔹 Cercles décoratifs
@@ -204,10 +204,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 
@@ -229,7 +226,10 @@ class _RegisterPageState extends State<RegisterPage> {
         filled: true,
         fillColor: Colors.white,
         labelStyle: const TextStyle(color: Colors.grey),
-        contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 20,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
@@ -239,12 +239,76 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
-          borderSide: const BorderSide(
-            color: Color(0xFF4B2FBF),
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF4B2FBF), width: 2),
         ),
       ),
     );
+  }
+
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
+  }
+  void _validation() {
+    if (_usernameController.text.isEmpty ||
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
+      _showError("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      _showError("Les mots de passe ne correspondent pas.");
+
+      return;
+    }
+
+    if (_passwordController.text.length < 6) {
+      _showError("Le mot de passe doit contenir au moins 6 caractères.");
+      return;
+    }
+
+    // Si toutes les validations passent
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Inscription en cours..."),
+        backgroundColor: Colors.green,
+      ),
+    );
+    _register();
+  }
+
+  void _register() async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final registeredUser = UserModel(
+        name: _usernameController.text.trim(),
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      final response = await authProvider.register(registeredUser);
+
+      if (response.statusCode == 201) {
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        _showError('Erreur lors de l\'inscription');
+      }
+    } catch (e) {
+      _showError('Erreur: $e');
+      print('Erreur: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 }

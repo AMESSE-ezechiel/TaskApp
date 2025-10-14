@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:task_app/Models/users.dart';
+import 'package:task_app/Providers/auth.dart';
 import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -41,8 +44,10 @@ class _LoginPageState extends State<LoginPage> {
           Center(
             child: SingleChildScrollView(
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 30,
+                  vertical: 40,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(25),
@@ -59,10 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Logo
-                    Image.asset(
-                      'assets/logo.png',
-                      height: 90,
-                    ),
+                    Image.asset('assets/logo.png', height: 90),
                     const SizedBox(height: 20),
 
                     // Titre
@@ -92,9 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: !_isVisible,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _isVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                          _isVisible ? Icons.visibility : Icons.visibility_off,
                           color: Colors.grey,
                         ),
                         onPressed: () {
@@ -119,7 +119,8 @@ class _LoginPageState extends State<LoginPage> {
                         onPressed: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content: Text("Connexion en cours...")),
+                              content: Text("Connexion en cours..."),
+                            ),
                           );
                         },
                         child: const Text(
@@ -147,7 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) => const RegisterPage()),
+                                builder: (newContext) => RegisterPage(),
+                              ),
                             );
                           },
                           child: const Text(
@@ -175,10 +177,7 @@ class _LoginPageState extends State<LoginPage> {
     return Container(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 
@@ -200,8 +199,10 @@ class _LoginPageState extends State<LoginPage> {
         filled: true,
         fillColor: Colors.white,
         labelStyle: const TextStyle(color: Colors.grey),
-        contentPadding:
-            const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 20,
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
@@ -211,12 +212,68 @@ class _LoginPageState extends State<LoginPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
-          borderSide: const BorderSide(
-            color: Color(0xFF4B2FBF),
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF4B2FBF), width: 2),
         ),
       ),
     );
+  }
+
+
+  
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
+  }
+  void _validation() {
+    if (
+        _emailController.text.isEmpty ||
+        _passwordController.text.isEmpty 
+        ) {
+      _showError("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    if (!_emailController.text.contains('@')) {
+      _showError("Veuillez entrer une adresse email valide.");
+      return;
+    }
+
+    // Si toutes les validations passent
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text("Connexion en cours..."),
+        backgroundColor: Colors.green,
+      ),
+    );
+    _login();
+  }
+
+  void _login() async {
+    try {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      final loginUser = UserModel(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      final response = await authProvider.login(loginUser);
+
+      if (response.statusCode == 201) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        _showError('Erreur lors de la connexion');
+      }
+    } catch (e) {
+      _showError('Erreur: $e');
+      print('Erreur: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

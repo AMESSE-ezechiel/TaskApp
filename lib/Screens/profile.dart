@@ -6,7 +6,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFD9D9D9),
+      backgroundColor:  Color(0xFFD9D9D9),
       body: Stack(
         children: [
           // Motifs de fond (cercles décoratifs)

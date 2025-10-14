@@ -14,3 +14,11 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+## Routes
+
+Cette application expose une route nommée `/login` qui pointe vers le widget `LoginPage`.
+Vous pouvez lancer l'application et naviguer vers cette route par :
+
+- initialRoute dans `lib/main.dart` est défini sur `/login`.
+- Ou avec `Navigator.pushNamed(context, '/login')` depuis n'importe quel widget.
