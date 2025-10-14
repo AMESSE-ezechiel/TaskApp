@@ -13,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3), () {
+    Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacementNamed(context, '/login');
     });
   }
@@ -26,17 +26,17 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset('assets/groupe1.png', width: 120),
-            const SizedBox(height: 16),
-            const Text(
-              "TRASKER",
-              style: TextStyle(
-                fontSize: 22,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.5,
-              ),
-            ),
+            Image.asset('assets/groupe1.png', width: 180),
+            // const SizedBox(height: 16),
+          //   const Text(
+          //     "TRASKER",
+          //     style: TextStyle(
+          //       fontSize: 22,
+          //       color: Colors.white,
+          //       fontWeight: FontWeight.bold,
+          //       letterSpacing: 1.5,
+          //     ),
+          //   ),
           ],
         ),
       ),

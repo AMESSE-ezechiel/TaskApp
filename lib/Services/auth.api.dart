@@ -45,14 +45,14 @@ class AuthApiService extends ChangeNotifier {
     await prefs.remove('auth_token');
   }
 
-  Future<Response> login(UserModel registeredUser) async {
+  Future<Response> login(UserModel loginUser) async {
     try {
       final response = await _dio.post('/login', data: {
-        'email': registeredUser.email,
-        'password': registeredUser.password,
+        'email': loginUser.email,
+        'password': loginUser.password,
       });
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final token = response.data['token'] ?? response.data['access_token'];
         if (token != null) {
           await _saveToken(token);

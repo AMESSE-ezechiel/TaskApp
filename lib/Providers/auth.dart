@@ -19,8 +19,8 @@ class AuthProvider with ChangeNotifier {
 
   String? getAuthToken() => _authToken;
 
-  Future<Response> login(UserModel registeredUser) async {
-    final response = await _apiAuthService.login(registeredUser);
+  Future<Response> login(UserModel loginUser) async {
+    final response = await _apiAuthService.login(loginUser);
     if (response.statusCode == 200 || response.statusCode == 201) {
       _authToken = response.data['token'];
       if (response.data['user'] != null) {

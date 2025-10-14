@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/Models/users.dart';
 import 'package:task_app/Providers/auth.dart';
-import 'register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -64,10 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Logo
-                    Image.asset(
-                      'assets/groupe1.png',
-                      height: 90,
-                    ),
+                    Image.asset('assets/groupe1.png', height: 90),
                     const SizedBox(height: 20),
 
                     // Titre
@@ -120,11 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                           elevation: 5,
                         ),
                         onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Connexion en cours..."),
-                            ),
-                          );
+                          _validation();
                         },
                         child: const Text(
                           "Se connecter",
@@ -148,12 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (newContext) => RegisterPage(),
-                              ),
-                            );
+                            Navigator.pushReplacementNamed(context, '/register');
                           },
                           child: const Text(
                             "Inscrivez-vous",
@@ -215,27 +202,20 @@ class _LoginPageState extends State<LoginPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
-          borderSide: const BorderSide(
-            color: Color(0xFF3B5998),
-            width: 2,
-          ),
+          borderSide: const BorderSide(color: Color(0xFF3B5998), width: 2),
         ),
       ),
     );
   }
 
-
-  
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
+
   void _validation() {
-    if (
-        _emailController.text.isEmpty ||
-        _passwordController.text.isEmpty 
-        ) {
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       _showError("Veuillez remplir tous les champs.");
       return;
     }
@@ -265,8 +245,9 @@ class _LoginPageState extends State<LoginPage> {
 
       final response = await authProvider.login(loginUser);
 
-      if (response.statusCode == 201) {
-        Navigator.pushReplacementNamed(context, '/home');
+      if (response.statusCode == 200) {
+        final userData = response.data['user'];
+        Navigator.pushReplacementNamed(context, '/task', arguments: userData);
       } else {
         _showError('Erreur lors de la connexion');
       }

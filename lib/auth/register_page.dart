@@ -21,7 +21,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FF),
       body: Stack(
@@ -67,11 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     // Logo
-
-                    Image.asset(
-                      'assets/groupe1.png',
-                      height: 90,
-                    ),
+                    Image.asset('assets/groupe1.png', height: 90),
 
                     const SizedBox(height: 20),
 
@@ -143,7 +138,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: double.infinity,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-
                           backgroundColor: const Color(0xFF3B5998),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
@@ -201,8 +195,6 @@ class _RegisterPageState extends State<RegisterPage> {
         ],
       ),
     );
-
-
   }
 
   // 🔹 Cercles décoratifs
@@ -246,22 +238,18 @@ class _RegisterPageState extends State<RegisterPage> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
 
-          borderSide: const BorderSide(
-            color: Color(0xFF3B5998),
-            width: 2,
-          ),
-
+          borderSide: const BorderSide(color: Color(0xFF3B5998), width: 2),
         ),
       ),
     );
   }
-
 
   void _showError(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message), backgroundColor: Colors.red),
     );
   }
+
   void _validation() {
     if (_usernameController.text.isEmpty ||
         _emailController.text.isEmpty ||
@@ -304,7 +292,8 @@ class _RegisterPageState extends State<RegisterPage> {
       final response = await authProvider.register(registeredUser);
 
       if (response.statusCode == 201) {
-        Navigator.pushReplacementNamed(context, '/login');
+        final userData = response.data['user'];
+        Navigator.pushReplacementNamed(context, '/task', arguments: userData);
       } else {
         _showError('Erreur lors de l\'inscription');
       }

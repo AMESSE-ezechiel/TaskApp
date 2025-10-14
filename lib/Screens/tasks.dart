@@ -1,29 +1,9 @@
 
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const TraskerApp());
-}
-
-class TraskerApp extends StatelessWidget {
-  const TraskerApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TRASKER',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        fontFamily: 'Roboto',
-      ),
-      home: const DashboardScreen(),
-    );
-  }
-}
-
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  final dynamic userData;
+  const DashboardScreen({Key? key, required this.userData}) : super(key: key);
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -41,7 +21,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'TRASKER',
           style: TextStyle(
             color: Color(0xFF4A5FC1),
@@ -50,23 +30,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ),
         actions: [
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                Text(
-                  'Bonjour,',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 14,
-                  ),
-                ),
+                // Text(
+                //   'Bonjour,',
+                //   style: TextStyle(
+                //     color: Colors.black87,
+                //     fontSize: 14,
+                //   ),
+                // ),
                 SizedBox(width: 8),
                 CircleAvatar(
                   backgroundColor: Color(0xFFE8C547),
                   radius: 16,
                   child: Text(
-                    'V',
+                    widget.userData != null && widget.userData['name'] != null && widget.userData['name'].isNotEmpty
+                        ? widget.userData['name'][0].toUpperCase()
+                        : 'U',
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
