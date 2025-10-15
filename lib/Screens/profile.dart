@@ -1,12 +1,37 @@
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  //  Déclaration des contrôleurs
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // 📝 Valeurs initiales (optionnel)
+    _nameController.text = 'Votre Nom';
+    _emailController.text = 'votre.email@example.com';
+  }
+
+  @override
+  void dispose() {
+    //  Libération de la mémoire (IMPORTANT !)
+    _nameController.dispose();
+    _emailController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:  Color(0xFFD9D9D9),
+      backgroundColor: const Color(0xFFD9D9D9),
       body: Stack(
         children: [
           // Motifs de fond (cercles décoratifs)
@@ -15,7 +40,7 @@ class ProfileScreen extends StatelessWidget {
             left: -60,
             child: CircleAvatar(
               radius: 100,
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.white.withOpacity(0.7),
             ),
           ),
           Positioned(
@@ -23,7 +48,7 @@ class ProfileScreen extends StatelessWidget {
             right: -70,
             child: CircleAvatar(
               radius: 90,
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.white.withOpacity(0.7),
             ),
           ),
           Positioned(
@@ -31,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
             left: 0,
             child: CircleAvatar(
               radius: 80,
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.white.withOpacity(0.7),
             ),
           ),
 
@@ -74,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
                         width: 300,
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: Colors.grey.shade200,
+                          color: Colors.grey.shade200.withOpacity(0.8),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.blueAccent.shade100),
                         ),
@@ -83,8 +108,9 @@ class ProfileScreen extends StatelessWidget {
                           children: [
                             const SizedBox(height: 50),
 
-                            // Champs du formulaire
+                            //  TextField avec contrôleur
                             TextField(
+                              controller: _nameController, //  Ajout du contrôleur
                               decoration: InputDecoration(
                                 labelText: 'Nom complet',
                                 border: OutlineInputBorder(
@@ -96,7 +122,10 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 15),
 
+                            //  TextField avec contrôleur
                             TextField(
+                              controller: _emailController, //  Ajout du contrôleur
+                              keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 labelText: 'Email',
                                 border: OutlineInputBorder(
@@ -108,18 +137,26 @@ class ProfileScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 20),
 
-                            // 🔵 Bouton Modifier (bleu)
+                            // 🔵 Bouton Modifier
                             ElevatedButton(
                               onPressed: () {
-                                // ✅ Affichage du SnackBar
+                                // 📖 Récupération des valeurs
+                                String name = _nameController.text;
+                                String email = _emailController.text;
+
+                                //  Affichage des valeurs
+                                print('Nom: $name');
+                                print('Email: $email');
+
+                                //  Affichage du SnackBar
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                     content: Text(
-                                      'Profil mis à jour avec succès !',
-                                      style: TextStyle(color: Colors.white),
+                                      'Profil mis à jour: $name - $email',
+                                      style: const TextStyle(color: Colors.white),
                                     ),
                                     backgroundColor: Colors.indigo,
-                                    duration: Duration(seconds: 2),
+                                    duration: const Duration(seconds: 2),
                                   ),
                                 );
                               },
@@ -133,7 +170,7 @@ class ProfileScreen extends StatelessWidget {
                               child: const Text(
                                 'Modifier',
                                 style: TextStyle(
-                                  color: Colors.white, 
+                                  color: Colors.white,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -162,33 +199,6 @@ class ProfileScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 5),
-
-                            // 🟡 Bouton blanc sous l’avatar
-                            ElevatedButton(
-                              onPressed: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Bouton de modification de l’avatar cliqué.',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                    backgroundColor: Colors.black87,
-                                    duration: Duration(seconds: 2),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                foregroundColor: Colors.black,
-                                shadowColor: Colors.grey,
-                                elevation: 2,
-                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              child: const Text('Modifier'),
-                            ),
                           ],
                         ),
                       ),
