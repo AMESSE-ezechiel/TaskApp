@@ -73,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 color: const Color(0xFF9FA6B0),
                 padding: const EdgeInsets.all(20),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // Search and filter section
                     Container(
@@ -157,11 +157,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
    
                     const SizedBox(height: 20),
-                    Row(
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      spacing: 32,
                       children: [
                         Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             const Text(
                               'Tableau de bord',
@@ -173,7 +176,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Gérer vos tâches\nefficacement',
+                              'Gérer vos tâches efficacement',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: Colors.black.withOpacity(0.7),
@@ -187,10 +190,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           icon: const Icon(Icons.add, size: 20),
                           label: const Text('Nouvelle tâche'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF4A5FC1),
+                            backgroundColor: Color(0xFF4A5FC1),
                             foregroundColor: Colors.white,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
+                              horizontal: 16,
                               vertical: 16,
                             ),
                             shape: RoundedRectangleBorder(
