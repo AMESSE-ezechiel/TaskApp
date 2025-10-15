@@ -224,13 +224,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // Filter dropdown menu overlay
           if (_showFilterMenu)
             Positioned(
-              top: 237,
-              right: 34,
+              top: 88,
+              right: 40,
               child: Material(
                 elevation: 8,
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
-                  width: 135,
+                  width: 100,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(8),
