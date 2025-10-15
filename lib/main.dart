@@ -16,10 +16,13 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthProvider()),
-        ChangeNotifierProvider(
+        ChangeNotifierProxyProvider<AuthProvider, TaskProvider>(
           create: (context) => TaskProvider(
             Provider.of<AuthProvider>(context, listen: false),
           ),
+          update: (context, authProvider, taskProvider) {
+            return TaskProvider(authProvider);
+          },
         ),
       ],
       child: const MyApp(),
@@ -57,11 +60,7 @@ class MyApp extends StatelessWidget {
           final args = ModalRoute.of(context)?.settings.arguments;
           return ProfileScreen(userData: args as UserModel);
         },
-        // add other routes here, e.g. '/register': (context) => const RegisterPage(),
       },
-
-     
-
     );
   }
 }

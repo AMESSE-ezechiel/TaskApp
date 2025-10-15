@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:task_app/Models/users.dart';
+import 'package:task_app/Providers/auth.dart';
 
 class ProfileScreen extends StatefulWidget {
   final UserModel userData;
@@ -14,11 +16,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    // 📝 Valeurs initiales (optionnel)
+    // 📝 Valeurs initiales
     _nameController.text = widget.userData.name.toString();
     _emailController.text = widget.userData.email.toString();
   }
@@ -32,8 +35,61 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.dispose();
   }
 
+  void _updateProfile() async {
+    if (_formKey.currentState!.validate()) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+      try {
+        final updatedUser = UserModel(
+          id: widget.userData.id,
+          name: _nameController.text,
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
+        final response = await authProvider.updateProfile(updatedUser);
+
+        if (response.statusCode == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Profil mis à jour avec succès!',
+                style: const TextStyle(color: Colors.white),
+              ),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+
+          // Retour à l'écran précédent
+          Navigator.pushReplacementNamed(
+            context,
+            '/home',
+            arguments: response.data['user'] != null
+                ? UserModel.fromJson(response.data['user'])
+                : widget.userData,
+          );
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Erreur lors de la mise à jour: $e',
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthProvider>(context);
+    final user = authProvider.currentUser ?? widget.userData;
+
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
       appBar: AppBar(
@@ -61,8 +117,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   backgroundColor: Color(0xFFE8C547),
                   radius: 16,
                   child: Text(
-                    widget.userData != null && widget.userData.name != ''
-                        ? widget.userData.name![0].toUpperCase()
+                    user.name != null && user.name!.isNotEmpty
+                        ? user.name![0].toUpperCase()
                         : 'U',
                     style: TextStyle(
                       color: Colors.white,
@@ -72,10 +128,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black87),
-            onPressed: () {},
           ),
         ],
       ),
@@ -126,103 +178,108 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(color: Colors.blueAccent.shade100),
                         ),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const SizedBox(height: 50),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const SizedBox(height: 50),
 
-                            //  TextField avec contrôleur
-                            TextField(
-                              controller:
-                                  _nameController, //  Ajout du contrôleur
-                              decoration: InputDecoration(
-                                labelText: 'Nom complet',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 15),
-
-                            //  TextField avec contrôleur
-                            TextField(
-                              controller:
-                                  _emailController, //  Ajout du contrôleur
-                              keyboardType: TextInputType.emailAddress,
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-
-                            const SizedBox(height: 15),
-
-                            //  TextField avec contrôleur
-                            TextField(
-                              controller:
-                                  _passwordController, //  Ajout du contrôleur
-                              keyboardType: TextInputType.visiblePassword,
-                              decoration: InputDecoration(
-                                labelText: 'Mot de passe',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                filled: true,
-                                fillColor: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-
-                            // 🔵 Bouton Modifier
-                            ElevatedButton(
-                              onPressed: () {
-                                // 📖 Récupération des valeurs
-                                String name = _nameController.text;
-                                String email = _emailController.text;
-
-                                //  Affichage des valeurs
-                                print('Nom: $name');
-                                print('Email: $email');
-
-                                //  Affichage du SnackBar
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Profil mis à jour: $name - $email',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    backgroundColor: Colors.indigo,
-                                    duration: const Duration(seconds: 2),
+                              //  TextField avec contrôleur
+                              TextFormField(
+                                controller: _nameController,
+                                decoration: InputDecoration(
+                                  labelText: 'Nom complet',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.indigo.shade700,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 40,
-                                  vertical: 12,
+                                  filled: true,
+                                  fillColor: Colors.white,
                                 ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Veuillez entrer votre nom';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 15),
+
+                              //  TextField avec contrôleur
+                              TextFormField(
+                                controller: _emailController,
+                                keyboardType: TextInputType.emailAddress,
+                                decoration: InputDecoration(
+                                  labelText: 'Email',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Veuillez entrer votre email';
+                                  }
+                                  if (!value.contains('@')) {
+                                    return 'Veuillez entrer un email valide';
+                                  }
+                                  return null;
+                                },
+                              ),
+
+                              const SizedBox(height: 15),
+
+                              //  TextField avec contrôleur
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: true,
+                                decoration: InputDecoration(
+                                  labelText: 'Nouveau mot de passe (optionnel)',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  filled: true,
+                                  fillColor: Colors.white,
                                 ),
                               ),
-                              child: const Text(
-                                'Modifier',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600,
+                              const SizedBox(height: 20),
+
+                              // 🔵 Bouton Modifier
+                              ElevatedButton(
+                                onPressed: _updateProfile,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.indigo.shade700,
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 40,
+                                    vertical: 12,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
                                 ),
+                                child: authProvider.isLoading
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                Colors.white,
+                                              ),
+                                        ),
+                                      )
+                                    : const Text(
+                                        'Modifier',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
 
@@ -237,7 +294,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               radius: 45,
                               backgroundColor: Colors.amber.shade700,
                               child: Text(
-                                widget.userData.name.toString().substring(0, 1).toUpperCase(),
+                                user.name
+                                    .toString()
+                                    .substring(0, 1)
+                                    .toUpperCase(),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 40,

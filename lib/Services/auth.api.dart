@@ -10,7 +10,6 @@ class AuthApiService extends ChangeNotifier {
     : _dio = Dio(
         BaseOptions(
           baseUrl: 'https://trasker.dayal-enterprises.com/public/api',
-          // baseUrl: 'http://127.0.0.1:8001/api',
           headers: {'Content-Type': 'application/json'},
         ),
       ) {
@@ -54,14 +53,13 @@ class AuthApiService extends ChangeNotifier {
       });
 
       if (response.statusCode == 200) {
-        final token = response.data['token'] ?? response.data['access_token'];
+        final token = response.data['token'];
         if (token != null) {
           await _saveToken(token);
         }
       }
       return response;
     } on DioException catch (e) {
-      print(e.message);
       throw Exception(e.response?.data?['message'] ?? e.message);
     }
   }
@@ -78,22 +76,20 @@ class AuthApiService extends ChangeNotifier {
       );
 
       if (response.statusCode == 201) {
-        final token = response.data['token'] ?? response.data['access_token'];
+        final token = response.data['token'];
         if (token != null) {
           await _saveToken(token);
         }
       }
-      print('response: ${response.data}');
       return response;
     } on DioException catch (e) {
-      print(e.message);
       throw Exception(e.response?.data?['message'] ?? e.message);
     }
   }
 
-  Future<Response> logout(UserModel user) async {
+  Future<Response> logout(String userId) async {
     try {
-      final response = await _dio.post('logout');
+      final response = await _dio.post('/logout/$userId');
       await _clearToken();
       return response;
     } on DioException catch (e) {
@@ -101,7 +97,7 @@ class AuthApiService extends ChangeNotifier {
     }
   }
 
-  Future<Response> profile() async {
+  Future<Response> getProfile() async {
     try {
       final response = await _dio.get('/profile');
       return response;
@@ -113,9 +109,14 @@ class AuthApiService extends ChangeNotifier {
     }
   }
 
-  Future<Response> profileUpdate(UserModel updatedUser) async {
+  Future<Response> updateProfile(UserModel updatedUser) async {
     try {
-      final response = await _dio.put('profile', data: updatedUser.toJson());
+      final response = await _dio.put('/update', data: {
+        'name': updatedUser.name,
+        'email': updatedUser.email,
+        if (updatedUser.password != null && updatedUser.password!.isNotEmpty)
+          'password': updatedUser.password,
+      });
       return response;
     } on DioException catch (e) {
       throw Exception(e.response?.data?['message'] ?? e.message);

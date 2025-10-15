@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:task_app/Models/users.dart';
-import 'package:task_app/Screens/profile.dart';
 
 class PageProfile extends StatefulWidget {
   final UserModel userData;

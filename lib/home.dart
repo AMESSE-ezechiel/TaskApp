@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_app/Models/users.dart';
 import 'package:task_app/Providers/auth.dart';
+import 'package:task_app/Providers/task.dart';
 import 'package:task_app/auth/login_page.dart';
 import 'package:task_app/layout/navigation.bar.dart';
 
@@ -15,6 +16,16 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    // Charger les tâches au démarrage
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+      taskProvider.loadUserTasks();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +43,6 @@ class _MainScreenState extends State<MainScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xFF7B818A),
-
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -50,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
             child: Row(
               children: [
                 Text(
-                  'Bonjour,',
+                  'Bienvenue,',
                   style: TextStyle(color: Colors.black87, fontSize: 14),
                 ),
                 SizedBox(width: 8),
@@ -72,7 +82,9 @@ class _MainScreenState extends State<MainScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.logout, color: Colors.black87),
-            onPressed: () {},
+            onPressed: () {
+              _logout(authProvider);
+            },
           ),
         ],
       ),
@@ -89,6 +101,24 @@ class _MainScreenState extends State<MainScreen> {
       ),
       drawer: _buildDrawer(user, authProvider),
     );
+  }
+
+  void _logout(AuthProvider authProvider) async {
+    try {
+      await authProvider.logout();
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+        (route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Erreur lors de la déconnexion: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   Widget _buildDrawer(UserModel user, AuthProvider authProvider) {
@@ -132,12 +162,7 @@ class _MainScreenState extends State<MainScreen> {
         leading: const Icon(Icons.logout),
         title: const Text('Déconnexion'),
         onTap: () {
-          authProvider.logout(user);
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-            (route) => false,
-          );
+          _logout(authProvider);
         },
       ),
     ];

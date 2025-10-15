@@ -292,7 +292,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final response = await authProvider.register(registeredUser);
 
       if (response.statusCode == 201) {
-        final userData = response.data['user'];
+        final userData = UserModel.fromJson(response.data['user']);
         Navigator.pushReplacementNamed(context, '/home', arguments: userData);
       } else {
         _showError('Erreur lors de l\'inscription');
