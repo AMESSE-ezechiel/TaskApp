@@ -111,36 +111,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SafeArea(
             child: Column(
               children: [
-                // En-tête
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'TRASKER',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Colors.blueAccent,
-                        ),
-                      ),
-                      Row(
-                        children: const [
-                          Text('Bonjour, ', style: TextStyle(fontSize: 14)),
-                          Icon(
-                            Icons.emoji_emotions_outlined,
-                            color: Colors.amber,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-
                 const SizedBox(height: 60),
 
                 // Carte principale
