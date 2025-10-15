@@ -41,10 +41,10 @@ class TaskApiService {
 
   Future<TaskModel> getUserTasks(UserModel userData) async {
     try {
-      print('🔄 Requête API tasks pour user ID: ${userData.id}');
+      print('🔄 Requête API tasks pour user ID: ${userData.name}');
 
       final response = await _dio.get(
-        '/tasks/${userData.id}',
+        '/tasks',
         options: Options(
           validateStatus: (status) => status! < 500,
         ),
@@ -58,8 +58,8 @@ class TaskApiService {
           print('📊 Données stats reçues: $responseData');
           
           // Gérer différents formats de réponse
-          if (responseData['statistiques'] != null) {
-            return TaskModel.fromJson(responseData['statistiques']);
+          if (responseData['tasks'] != null) {
+            return TaskModel.fromJson(responseData['tasks']);
           } else if (responseData['data'] != null) {
             return TaskModel.fromJson(responseData['data']);
           } else {
@@ -67,8 +67,8 @@ class TaskApiService {
           }
         
         case 404:
-          print('📊 Aucune statistique trouvée, utilisation des données par défaut');
-          return _getDefaultStatistics(userData);
+          print('📊 Aucune tâche trouvée, utilisation des données par défaut');
+          return _getDefaultTask(userData);
         
         case 401:
           throw Exception('Non authentifié. Veuillez vous reconnecter.');
@@ -84,18 +84,18 @@ class TaskApiService {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.connectionError) {
         print('🌐 Timeout connexion, retour données par défaut');
-        return _getDefaultStatistics(userData);
+        return _getDefaultTask(userData);
       }
       
       throw Exception(e.response?.data?['message'] ?? 'Erreur de connexion');
     } catch (e) {
       print('❌ Erreur inattendue stats: $e');
       // Retourner des données par défaut en cas d'erreur inattendue
-      return _getDefaultStatistics(userData);
+      return _getDefaultTask(userData);
     }
   }
 
-  TaskModel _getDefaultStatistics(UserModel userData) {
+  TaskModel _getDefaultTask(UserModel userData) {
     return TaskModel(
       id: 0,
       title: 'Aucune tâche',

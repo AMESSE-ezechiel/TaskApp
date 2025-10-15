@@ -29,11 +29,11 @@ class TaskProvider with ChangeNotifier {
     _errorMessage = '';
 
     try {
-      final userId = _authProvider.currentUser?.id;
-      if (userId == null) {
+      dynamic userData = _authProvider.currentUser;
+      if (userData == null) {
         throw Exception('Utilisateur non authentifié');
       }
-      _userTask = await _taskApiService.getUserTasks(userId);
+      _userTask = await _taskApiService.getUserTasks(userData.id);
       _errorMessage = ''; // Clear error on success
       notifyListeners();
     } catch (e) {

@@ -34,13 +34,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             padding: EdgeInsets.symmetric(horizontal: 12),
             child: Row(
               children: [
-                // Text(
-                //   'Bonjour,',
-                //   style: TextStyle(
-                //     color: Colors.black87,
-                //     fontSize: 14,
-                //   ),
-                // ),
+                Text(
+                  'Bonjour,',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,
+                  ),
+                ),
                 SizedBox(width: 8),
                 CircleAvatar(
                   backgroundColor: Color(0xFFE8C547),
@@ -75,50 +75,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Tableau de bord',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              'Gérer vos tâches\nefficacement',
-                              style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black.withOpacity(0.7),
-                                height: 1.3,
-                              ),
-                            ),
-                          ],
-                        ),
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(Icons.add, size: 20),
-                          label: const Text('Nouvelle tâche'),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF4A5FC1),
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 16,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
                     // Search and filter section
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -198,6 +154,51 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ],
                       ),
+                    ),
+   
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Tableau de bord',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'Gérer vos tâches\nefficacement',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black.withOpacity(0.7),
+                                height: 1.3,
+                              ),
+                            ),
+                          ],
+                        ),
+                        ElevatedButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.add, size: 20),
+                          label: const Text('Nouvelle tâche'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF4A5FC1),
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 16,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
