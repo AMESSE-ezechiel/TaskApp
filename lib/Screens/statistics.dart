@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_app/Models/users.dart';
 import 'package:task_app/Providers/task.dart';
 
 class StatisticsScreen extends StatefulWidget {
-  final Map<String, dynamic> userData;
+  final UserModel userData;
   const StatisticsScreen({super.key, required this.userData});
 
   @override
@@ -149,7 +150,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               radius: 30,
               backgroundColor: const Color.fromARGB(255, 74, 111, 165),
               child: Text(
-                widget.userData['name']?.toString().substring(0, 1).toUpperCase() ?? 'U',
+                widget.userData.name.toString().substring(0, 1).toUpperCase() ?? 'U',
                 style: const TextStyle(fontSize: 24, color: Colors.white),
               ),
             ),
@@ -159,14 +160,10 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.userData['name']?.toString() ?? 'Utilisateur',
+                    widget.userData.name.toString() ?? 'Utilisateur',
                     style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
-                  Text(widget.userData['email']?.toString() ?? ''),
-                  Chip(
-                    label: Text(widget.userData['role']?.toString().toUpperCase() ?? 'USER'),
-                    backgroundColor: const Color.fromARGB(255, 74, 111, 165),
-                  ),
+                  Text(widget.userData.email.toString() ?? ''),
                 ],
               ),
             ),

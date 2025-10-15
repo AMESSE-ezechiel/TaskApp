@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:task_app/Models/tasks.dart';
+import 'package:task_app/Models/users.dart';
 
 class TaskApiService {
   final Dio _dio;

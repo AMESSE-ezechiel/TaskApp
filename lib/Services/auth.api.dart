@@ -10,6 +10,7 @@ class AuthApiService extends ChangeNotifier {
     : _dio = Dio(
         BaseOptions(
           baseUrl: 'https://trasker.dayal-enterprises.com/public/api',
+          // baseUrl: 'http://127.0.0.1:8001/api',
           headers: {'Content-Type': 'application/json'},
         ),
       ) {

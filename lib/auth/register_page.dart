@@ -293,7 +293,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (response.statusCode == 201) {
         final userData = response.data['user'];
-        Navigator.pushReplacementNamed(context, '/task', arguments: userData);
+        Navigator.pushReplacementNamed(context, '/home', arguments: userData);
       } else {
         _showError('Erreur lors de l\'inscription');
       }

@@ -1,8 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:task_app/Models/users.dart';
 
 class DashboardScreen extends StatefulWidget {
-  final dynamic userData;
+  final UserModel userData;
   const DashboardScreen({Key? key, required this.userData}) : super(key: key);
 
   @override
@@ -18,52 +19,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF9FA6B0),
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
-          'TRASKER',
-          style: TextStyle(
-            color: Color(0xFF4A5FC1),
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12),
-            child: Row(
-              children: [
-                Text(
-                  'Bonjour,',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 14,
-                  ),
-                ),
-                SizedBox(width: 8),
-                CircleAvatar(
-                  backgroundColor: Color(0xFFE8C547),
-                  radius: 16,
-                  child: Text(
-                    widget.userData != null && widget.userData['name'] != null && widget.userData['name'].isNotEmpty
-                        ? widget.userData['name'][0].toUpperCase()
-                        : 'U',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.black87),
-            onPressed: () {},
-          ),
-        ],
-      ),
       body: Stack(
         children: [
           Column(
@@ -76,13 +31,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // Search and filter section
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.9),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
+                    
+                      Row(
                         children: [
                           Expanded(
                             child: Container(
@@ -154,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ],
                       ),
-                    ),
+                    
    
                     const SizedBox(height: 20),
                     Column(
@@ -249,30 +199,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        selectedItemColor: const Color(0xFF4A5FC1),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.donut_small),
-            label: 'Statictique',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.star_border),
-            label: 'Tâche',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            label: 'Profil',
-          ),
         ],
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/Models/users.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final UserModel userData;
+  const ProfileScreen({super.key, required this.userData});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -11,13 +13,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   //  Déclaration des contrôleurs
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     // 📝 Valeurs initiales (optionnel)
-    _nameController.text = 'Votre Nom';
-    _emailController.text = 'votre.email@example.com';
+    _nameController.text = widget.userData.name.toString();
+    _emailController.text = widget.userData.email.toString();
   }
 
   @override
@@ -25,6 +28,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     //  Libération de la mémoire (IMPORTANT !)
     _nameController.dispose();
     _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -32,6 +36,49 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFD9D9D9),
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: Text(
+          'TRASKER',
+          style: TextStyle(
+            color: Color(0xFF4A5FC1),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Text(
+                  'Bonjour,',
+                  style: TextStyle(color: Colors.black87, fontSize: 14),
+                ),
+                SizedBox(width: 8),
+                CircleAvatar(
+                  backgroundColor: Color(0xFFE8C547),
+                  radius: 16,
+                  child: Text(
+                    widget.userData != null && widget.userData.name != ''
+                        ? widget.userData.name![0].toUpperCase()
+                        : 'U',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.black87),
+            onPressed: () {},
+          ),
+        ],
+      ),
       body: Stack(
         children: [
           // Motifs de fond (cercles décoratifs)
@@ -66,7 +113,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 // En-tête
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -81,9 +131,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Row(
                         children: const [
                           Text('Bonjour, ', style: TextStyle(fontSize: 14)),
-                          Icon(Icons.emoji_emotions_outlined, color: Colors.amber),
+                          Icon(
+                            Icons.emoji_emotions_outlined,
+                            color: Colors.amber,
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -110,7 +163,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                             //  TextField avec contrôleur
                             TextField(
-                              controller: _nameController, //  Ajout du contrôleur
+                              controller:
+                                  _nameController, //  Ajout du contrôleur
                               decoration: InputDecoration(
                                 labelText: 'Nom complet',
                                 border: OutlineInputBorder(
@@ -124,10 +178,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                             //  TextField avec contrôleur
                             TextField(
-                              controller: _emailController, //  Ajout du contrôleur
+                              controller:
+                                  _emailController, //  Ajout du contrôleur
                               keyboardType: TextInputType.emailAddress,
                               decoration: InputDecoration(
                                 labelText: 'Email',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                            ),
+
+                            const SizedBox(height: 15),
+
+                            //  TextField avec contrôleur
+                            TextField(
+                              controller:
+                                  _passwordController, //  Ajout du contrôleur
+                              keyboardType: TextInputType.visiblePassword,
+                              decoration: InputDecoration(
+                                labelText: 'Mot de passe',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -153,7 +225,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   SnackBar(
                                     content: Text(
                                       'Profil mis à jour: $name - $email',
-                                      style: const TextStyle(color: Colors.white),
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                     backgroundColor: Colors.indigo,
                                     duration: const Duration(seconds: 2),
@@ -162,7 +236,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.indigo.shade700,
-                                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 40,
+                                  vertical: 12,
+                                ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
@@ -189,8 +266,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             CircleAvatar(
                               radius: 45,
                               backgroundColor: Colors.amber.shade700,
-                              child: const Text(
-                                'V',
+                              child: Text(
+                                widget.userData.name.toString().substring(0, 1).toUpperCase(),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 40,

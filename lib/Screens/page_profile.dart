@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:task_app/Models/users.dart';
 import 'package:task_app/Screens/profile.dart';
 
-class PageProfile extends StatelessWidget {
-  const PageProfile({super.key});
+class PageProfile extends StatefulWidget {
+  final UserModel userData;
+  const PageProfile({super.key, required this.userData});
 
+  @override
+  State<PageProfile> createState() => _PageProfileState();
+}
+
+class _PageProfileState extends State<PageProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,9 +97,9 @@ class PageProfile extends StatelessWidget {
                           children: [
                             const SizedBox(height: 50),
 
-                            const Text(
-                              'BARDOCK Corneille',
-                              style: TextStyle(
+                            Text(
+                              widget.userData.name.toString(),
+                              style: const TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black87,
@@ -101,9 +108,9 @@ class PageProfile extends StatelessWidget {
 
                             const SizedBox(height: 15),
 
-                            const Text(
-                              'bardockdev@gmail.com',
-                              style: TextStyle(
+                            Text(
+                              widget.userData.email.toString(),
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black54,
@@ -130,8 +137,11 @@ class PageProfile extends StatelessWidget {
                                 213,
                                 0,
                               ),
-                              child: const Text(
-                                'V',
+                              child: Text(
+                                widget.userData.name
+                                    .toString()
+                                    .substring(0, 1)
+                                    .toUpperCase(),
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 40,
@@ -158,11 +168,10 @@ class PageProfile extends StatelessWidget {
             child: Center(
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushReplacementNamed(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const ProfileScreen(),
-                    ),
+                    '/profile_edit',
+                    arguments: widget.userData,
                   );
                 },
                 style: ElevatedButton.styleFrom(
