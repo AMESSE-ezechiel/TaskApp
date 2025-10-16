@@ -103,7 +103,7 @@ flutter_native_splash:
   ios: true
   web: false
   # branding: assets/logo.png   # optionnel : petit texte ou logo partenaire
-  android_12:
+  android_7:
     image: assets/groupe1.png
     icon_background_color: "#ffffff"
 
