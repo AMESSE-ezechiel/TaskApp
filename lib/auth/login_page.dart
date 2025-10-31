@@ -246,8 +246,8 @@ class _LoginPageState extends State<LoginPage> {
       final response = await authProvider.login(loginUser);
 
       if (response.statusCode == 200) {
-        final userData = response.data['user'];
-        Navigator.pushReplacementNamed(context, '/task', arguments: userData);
+        final userData = UserModel.fromJson(response.data['user']);
+        Navigator.pushReplacementNamed(context, '/home', arguments: userData);
       } else {
         _showError('Erreur lors de la connexion');
       }
